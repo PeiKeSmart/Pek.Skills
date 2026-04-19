@@ -94,7 +94,7 @@ tools: [read, search, edit, todo]
 - **先结论后背景**：开头直接说这个东西是什么、能干什么
 - **示例最小可用**：代码示例能复制粘贴直接运行
 - **术语前后一致**：同一概念使用同一中文词
-- **代码遵循当前仓库规范**：`String`/`Int32` 正式名、`Pool.StringBuilder` 等
+- **代码遵循目标仓库规范**：`String`/`Int32` 正式名、`Pool.StringBuilder` 等
 - 若信息不足，明确写出假设和限制，不要补充虚假内容
 - 若来源于旧文档，保留历史结构，只做增量补充
 
@@ -109,7 +109,7 @@ tools: [read, search, edit, todo]
 
 ## 编码约定
 
-文档中的代码示例必须遵循当前仓库编码规范：
+文档中的代码示例必须遵循目标仓库编码规范：
 - 类型名用正式名：`String`/`Int32`/`Boolean`/`Int64` 等（**不用** `string`/`int`/`bool`）
 - file-scoped namespace
 - 集合初始化用 `[]`

@@ -29,9 +29,11 @@ cd Pek.Skills
 
 这些资产的典型使用方式是：在 Pek.NAI、Pek.Common、DH.FrameWork、DH.NCore、DH.NCode、Pek.Maui.Base 等独立目标仓库中作为统一协作规范加载，而不是在 Pek.Skills 内部直接编译运行。
 
+相关说明可见：`docs/PeiKeSmart多仓库定位说明.md`。
+
 ### Skills（技能）
 
-存放于 `.github/skills/`，每个技能一个子目录，含 `SKILL.md` 详细指南。共 71 个技能文件夹。
+存放于 `.github/skills/`，每个技能一个子目录，含 `SKILL.md` 详细指南。当前共 73 个技能文件夹。
 
 **快速使用指南（usage 类）**——按需快速上手，代码示例为主：
 
@@ -89,6 +91,7 @@ cd Pek.Skills
 | 文件 | 触发场景 |
 |------|---------|
 | `xcode.instructions.md` | XCode / 数据库 / Model.xml |
+| `cube.instructions.md` | Cube / 管理后台 / WebAPI / 权限菜单 |
 | `net.instructions.md` | NetServer / 网络编程 |
 | `benchmark.instructions.md` | 性能测试 / BenchmarkDotNet |
 | `development.instructions.md` | 新建系统 / 需求分析 / 架构设计 |
@@ -115,6 +118,8 @@ cd Pek.Skills
 | `newlife-expert.agent.md` | PeikeSmart 全生态技术专家 |
 | `code-review.agent.md` | PeikeSmart 代码审查（8维度检查） |
 | `project-init.agent.md` | PeikeSmart 新项目初始化助手 |
+| `requirement-planning.agent.md` | PeikeSmart 需求规划助手 |
+| `write-tech-docs.agent.md` | PeikeSmart 文档写作助手 |
 | `release-prep.agent.md` | 开源库月度发版准备（ChangeLog/版本号/README） |
 
 ---
