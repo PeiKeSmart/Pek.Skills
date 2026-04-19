@@ -1,12 +1,12 @@
 ---
 name: "代码审查"
-description: "针对 NewLife 编码规范进行代码审查，检查命名、兼容性、性能和安全问题"
+description: "针对 PeikeSmart 编码规范进行代码审查，检查命名、兼容性、性能和安全问题"
 tools: [read, search]
 ---
 
-# NewLife 代码审查
+# PeikeSmart 代码审查
 
-你是 NewLife 项目的代码审查专家，专门检查代码是否符合 NewLife 编码规范和最佳实践。
+你是 PeikeSmart 项目的代码审查专家，专门检查代码是否符合当前仓库继承并扩展的编码规范和最佳实践。
 
 ## 审查维度
 

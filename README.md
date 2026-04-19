@@ -1,6 +1,6 @@
-# NewLife Skills
+# PeikeSmart Skills
 
-**NewLife Copilot 资产统一管理库**——集中管理 NewLife 系列项目所有可复用的 Copilot 资产：技能、指令、提示词、智能体。
+**PeikeSmart Copilot 资产统一管理库**——集中管理 PeikeSmart 系列项目所有可复用的 Copilot 资产：技能、指令、提示词、智能体，整体规范基于 NewLife 体系持续演化。
 
 克隆到任意机器后，执行一条脚本即可将全部资产安装到 VS Code 用户数据目录，**无需在每个项目里各放一份 `.github`**。
 
@@ -12,8 +12,8 @@
 
 ```powershell
 # 克隆此仓库
-git clone https://github.com/NewLifeX/NewLife.Skills.git
-cd NewLife.Skills
+git clone https://github.com/PeiKeSmart/Pek.Skills.git
+cd Pek.Skills
 
 # 安装全部 Copilot 资产到用户级目录
 .\scripts\install-copilot-assets.ps1
@@ -108,9 +108,9 @@ cd NewLife.Skills
 
 | 文件 | 用途 |
 |------|------|
-| `newlife-expert.agent.md` | NewLife 全生态技术专家 |
-| `code-review.agent.md` | NewLife 代码审查（8维度检查） |
-| `project-init.agent.md` | NewLife 新项目初始化助手 |
+| `newlife-expert.agent.md` | PeikeSmart 全生态技术专家 |
+| `code-review.agent.md` | PeikeSmart 代码审查（8维度检查） |
+| `project-init.agent.md` | PeikeSmart 新项目初始化助手 |
 | `release-prep.agent.md` | 开源库月度发版准备（ChangeLog/版本号/README） |
 
 ---
@@ -119,7 +119,7 @@ cd NewLife.Skills
 
 ```text
 .github/
-  copilot-instructions.md      # NewLife 全局 Copilot 协作规范（含编码规范）
+  copilot-instructions.md      # PeikeSmart 全局 Copilot 协作规范（含编码规范）
   agents/                      # 智能体定义 (*.agent.md)  → chatmodes/
   instructions/                # 场景指令 (*.instructions.md)  → prompts/
   prompts/                     # 提示词模板 (*.prompt.md)  → prompts/
@@ -142,12 +142,12 @@ scripts/
 | Instructions (`*.instructions.md`) | `%APPDATA%\Code\User\prompts\` |
 | Prompts (`*.prompt.md`) | `%APPDATA%\Code\User\prompts\` |
 | Agents (`*.agent.md`) | `%APPDATA%\Code\User\prompts\` |
-| 全局指令 (`copilot-instructions.md`) | `%APPDATA%\Code\User\prompts\newlife-global.instructions.md` |
+| 全局指令 (`copilot-instructions.md`) | `%APPDATA%\Code\User\prompts\peikesmart-global.instructions.md` |
 
 ---
 
 ## 维护说明
 
-1. 从其他 NewLife 仓库（如 `.github/` 目录）学到新规范后，在此库中统一更新。
+1. 从其他 PeikeSmart 仓库（以及上游 NewLife 来源，如 `.github/` 目录）学到新规范后，在此库中统一更新。
 2. 更新后重新运行 `install-copilot-assets.ps1` 即可覆盖更新本机资产。
 3. 提交到 Git，其他机器 `git pull` 后再次运行脚本即可同步。

@@ -1,6 +1,6 @@
 ﻿<#
 .SYNOPSIS
-    安装 NewLife Copilot 资产到 VSCode 用户数据目录，使其对本机所有项目生效。
+    安装 PeikeSmart Copilot 资产到 VSCode 用户数据目录，使其对本机所有项目生效。
 
 .DESCRIPTION
     将 .github/ 下的 skills/instructions/prompts/agents 安装到 VSCode 用户数据目录：
@@ -59,7 +59,7 @@ function WriteStep ([string]$Msg) {
 
 # ── Banner ────────────────────────────────────────────────────────────────────
 Write-Host ""
-Write-Host "=== NewLife Copilot 资产安装 ===" -ForegroundColor Green
+Write-Host "=== PeikeSmart Copilot 资产安装 ===" -ForegroundColor Green
 Write-Host "  仓库: $RepoRoot"
 Write-Host "  目标: $userDataDir"
 Write-Host ""
@@ -149,9 +149,11 @@ Write-Host "[5/5] 全局 Copilot 指令" -ForegroundColor Yellow
 if (Test-Path $globalInstrSrc) {
     $content = Get-Content -Path $globalInstrSrc -Raw -Encoding UTF8
     $wrapped = "---`napplyTo: `"**`"`n---`n" + $content
-    $dstFile = Join-Path $promptsDst "newlife-global.instructions.md"
+    $legacyFile = Join-Path $promptsDst "newlife-global.instructions.md"
+    if (Test-Path $legacyFile) { Remove-Item -Path $legacyFile -Force }
+    $dstFile = Join-Path $promptsDst "peikesmart-global.instructions.md"
     [System.IO.File]::WriteAllText($dstFile, $wrapped, [System.Text.UTF8Encoding]::new($false))
-    WriteStep "newlife-global.instructions.md"
+    WriteStep "peikesmart-global.instructions.md"
     $installed++
 } else {
     Write-Host "    （跳过：$globalInstrSrc 不存在）" -ForegroundColor DarkGray
