@@ -29,7 +29,9 @@ cd Pek.Skills
 
 这些资产的典型使用方式是：在 Pek.NAI、Pek.Common、DH.FrameWork、DH.NCore、DH.NCode、Pek.Maui.Base 等独立目标仓库中作为统一协作规范加载，而不是在 Pek.Skills 内部直接编译运行。
 
-相关说明可见：`docs/PeiKeSmart多仓库定位说明.md`。
+相关说明可见：`docs/PeiKeSmart多仓库定位说明.md`、`docs/PeiKeSmart仓库地图.md`、`docs/运行时资产完整性检查清单.md`。
+
+如需在发版前快速自检资产完整性，可执行：`./scripts/verify-copilot-assets.ps1`。
 
 ### Skills（技能）
 

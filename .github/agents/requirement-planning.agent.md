@@ -147,7 +147,7 @@ tools: [read, search, edit, todo]
 
 ## 文档输出约定
 
-- 存放目录：`Doc/`
+- 存放目录：优先沿用目标仓库现有文档目录；Pek.Skills 使用 `docs/`
 - 需求文档：`Doc/需求/{功能名}需求.md`
 - 技术方案：`Doc/设计/{功能名}设计.md`
 - 编码：UTF-8 无 BOM

@@ -2,6 +2,8 @@
 
 本文定义 `d:\X\NewLife.Core` 的持续扫描和技能提炼顺序，目标是避免一次性铺得太大，保证每轮都有可验证产出。
 
+> 说明：本文中的 `d:\X\NewLife.Core`、`Doc/`、`.github/...` 路径指向的是上游 NewLife 来源仓库中的证据位置，不是 Pek.Skills 当前工作区内必须存在的本地文件。
+
 ## 目标
 
 - 从 `.github` 中提炼可复用的协作技能。
@@ -26,7 +28,7 @@
 - `d:\X\NewLife.Core\.github\copilot-instructions.md`
 - `d:\X\NewLife.Core\.github\instructions\development.instructions.md`
 - `d:\X\NewLife.Core\.github\instructions\benchmark.instructions.md`
-- `d:\X\NewLife.Core\.github\prompts\doc-writer.md`
+- `d:\X\NewLife.Core\.github\prompts\doc-writer.prompt.md`
 
 ### 产出
 

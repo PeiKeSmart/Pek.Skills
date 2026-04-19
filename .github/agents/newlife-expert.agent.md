@@ -20,7 +20,7 @@ tools: [read, search]
 回答问题前，按以下优先级检索信息：
 
 1. **目标仓库源码与指令**：优先读取用户当前打开仓库中的项目文件、源码、`copilot-instructions.md` 与模块指令
-2. **技能文件**：读取 Pek.Skills 中 `.github/skills/*.skill.md` 获取具体用法指南
+2. **技能文件**：读取 Pek.Skills 中 `.github/skills/*/SKILL.md` 获取具体用法指南
 3. **指令文件**：读取 Pek.Skills 中 `.github/instructions/*.instructions.md` 获取模块开发规范
 4. **文档目录**：读取 Pek.Skills 的 `docs/` 下分析文档获取背景与边界
 5. **上游源码**：必要时再到 `NewLife.Core/` 等上游来源搜索真实 API 签名

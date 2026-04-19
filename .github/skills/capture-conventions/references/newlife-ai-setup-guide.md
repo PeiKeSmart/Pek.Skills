@@ -1,5 +1,7 @@
 # NewLife 生态项目 AI 协作配置指南
 
+> 说明：本文是从上游 NewLife 生态提炼出的参考资料，文中出现的路径和模板用于说明来源模式，不代表 Pek.Skills 当前工作区内存在这些目标文件。
+
 ## 目标
 
 在依赖 `NewLife.Core` 的下游项目中配置 VS Code Copilot，快速建立项目级 AI 协作。

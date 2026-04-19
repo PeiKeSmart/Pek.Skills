@@ -2,6 +2,8 @@
 
 本文用于把 `d:\X\NewLife.Core` 中的高价值知识来源映射到 `d:\X\NewLife.Skills` 的目标技能，作为后续持续提炼、融合和校验的依据。
 
+> 说明：表格中的 `Doc/`、`NewLife.Core/...`、`.github/...` 多数属于上游 NewLife 仓库的来源证据路径，用于记录知识出处；它们不是 Pek.Skills 仓库内的运行时资产路径。
+
 ## 总体原则
 
 - **先高价值**：优先处理 `.github` 协作指令，其次是 `Doc/` 高价值模块文档，最后是源码稳定约定。
@@ -27,7 +29,7 @@
 | `.github/copilot-instructions.md` | 核心原则、兼容性、编码规范、测试、文档发布、禁止项 | 高 | `coding-standards`、`compatibility-checks` | 已开始抽象 |
 | `.github/instructions/development.instructions.md` | 需求 → 设计 → 拆分 → 迭代 → 验收 → 自治批处理 | 高 | `development-workflow` | 已开始抽象 |
 | `.github/instructions/benchmark.instructions.md` | BenchmarkDotNet 规范、报告格式、分析约束 | 高 | `benchmark-testing` | 已开始抽象 |
-| `.github/prompts/doc-writer.md` | API 文档 frontmatter 与章节骨架 | 高 | `write-tech-docs`（增强） | 已纳入增强计划 |
+| `.github/prompts/doc-writer.prompt.md` | API 文档 frontmatter 与章节骨架 | 高 | `write-tech-docs`（增强） | 已纳入增强计划 |
 | `.github/instructions/caching.instructions.md` | 缓存模块规范 | 中 | 待后续决定：通用缓存技能 / 仅作为来源 | 暂缓 |
 | `.github/instructions/serialization.instructions.md` | 序列化模块规范 | 中 | 待后续决定：序列化技能 | 暂缓 |
 | `.github/instructions/security.instructions.md` | 安全与加密规范 | 中 | 待后续决定：安全技能 | 暂缓 |
@@ -42,7 +44,7 @@
 
 | 来源文件 | 主题 | 分级 | 目标技能/文档 | 当前决策 |
 |---------|------|------|---------------|---------|
-| `Doc/核心库目录.md` | 全量导航索引 | 高 | `docs/newlife-core-analysis-roadmap.md`、后续主题映射 | 立即使用 |
+| `Doc/核心库目录.md` | 全量导航索引 | 高 | `docs/newlife-analysis-roadmap.md`、后续主题映射 | 立即使用 |
 | `Doc/HTTP客户端ApiHttpClient.md` | 多节点 HTTP 客户端、故障转移、负载均衡 | 高 | `http-client-loadbalancer` | 已开始实施 |
 | `Doc/事件总线EventBus.md` | 事件驱动、消息分发 | 高 | `event-bus-messaging` | **已实施** |
 | `Doc/数据包IPacket.md` | 高性能缓冲区、数据包设计 | 高 | `high-performance-buffers` | **已实施** |

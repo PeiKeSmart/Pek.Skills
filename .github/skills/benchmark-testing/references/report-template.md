@@ -2,6 +2,8 @@
 
 本文从 `d:\X\NewLife.Core\.github\instructions\benchmark.instructions.md` 中提炼了可复用的性能测试与报告约束。
 
+> 说明：这里记录的是上游 NewLife 来源模板，不是 Pek.Skills 仓库中的可执行指令文件；实际运行时请以当前仓库内的 `benchmark.instructions.md` 和 skill 内容为准。
+
 ## Benchmark 设计建议
 
 - 类名建议体现被测对象
