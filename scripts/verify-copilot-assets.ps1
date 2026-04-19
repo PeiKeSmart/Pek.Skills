@@ -15,7 +15,8 @@
     .\verify-copilot-assets.ps1
 #>
 param(
-    [string]$RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
+    [string]$RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path,
+    [switch]$CheckInstalled
 )
 
 $ErrorActionPreference = "Stop"
@@ -39,6 +40,9 @@ $readme = Join-Path $RepoRoot "README.md"
 $globalInstructions = Join-Path $githubDir "copilot-instructions.md"
 $installScript = Join-Path $RepoRoot "scripts\install-copilot-assets.ps1"
 $compatScript = Join-Path $RepoRoot "scripts\sync-skills-to-user.ps1"
+$installedRoot = Join-Path $env:APPDATA "Code\User\prompts"
+$installedSkillsDir = Join-Path $installedRoot "skills"
+$installedGlobalInstructions = Join-Path $installedRoot "peikesmart-global.instructions.md"
 
 Assert-Path $githubDir ".github 目录"
 Assert-Path $skillsDir "skills 目录"
@@ -104,18 +108,50 @@ $instructionCount = if (Test-Path $instructionsDir) { (Get-ChildItem -Path $inst
 $agentCount = if (Test-Path $agentsDir) { (Get-ChildItem -Path $agentsDir -File -Filter *.agent.md | Measure-Object).Count } else { 0 }
 $promptCount = if (Test-Path $promptsDir) { (Get-ChildItem -Path $promptsDir -File -Filter *.prompt.md | Measure-Object).Count } else { 0 }
 
-Write-Host "Pek.Skills 资产统计:" -ForegroundColor Cyan
-Write-Host "  Skills       : $skillCount"
-Write-Host "  Instructions : $instructionCount"
-Write-Host "  Agents       : $agentCount"
-Write-Host "  Prompts      : $promptCount"
+Write-Output "Pek.Skills 源资产统计:"
+Write-Output "  Skills       : $skillCount"
+Write-Output "  Instructions : $instructionCount"
+Write-Output "  Agents       : $agentCount"
+Write-Output "  Prompts      : $promptCount"
+
+if ($CheckInstalled) {
+    Assert-Path $installedRoot "安装目标目录"
+    Assert-Path $installedSkillsDir "已安装 skills 目录"
+    Assert-Path $installedGlobalInstructions "已安装全局指令"
+
+    $installedSkillCount = if (Test-Path $installedSkillsDir) { (Get-ChildItem -Path $installedSkillsDir -Directory | Measure-Object).Count } else { 0 }
+    $installedInstructionCount = if (Test-Path $installedRoot) { (Get-ChildItem -Path $installedRoot -File -Filter *.instructions.md | Measure-Object).Count } else { 0 }
+    $installedAgentCount = if (Test-Path $installedRoot) { (Get-ChildItem -Path $installedRoot -File -Filter *.agent.md | Measure-Object).Count } else { 0 }
+    $installedPromptCount = if (Test-Path $installedRoot) { (Get-ChildItem -Path $installedRoot -File -Filter *.prompt.md | Measure-Object).Count } else { 0 }
+
+    Write-Output "已安装资产统计:"
+    Write-Output "  Skills       : $installedSkillCount"
+    Write-Output "  Instructions : $installedInstructionCount"
+    Write-Output "  Agents       : $installedAgentCount"
+    Write-Output "  Prompts      : $installedPromptCount"
+
+    if ($installedSkillCount -lt $skillCount) {
+        Add-Issue("已安装 skills 数量少于源仓库: $installedSkillCount / $skillCount")
+    }
+    if ($installedInstructionCount -lt ($instructionCount + 1)) {
+        Add-Issue("已安装 instructions 数量少于预期（含全局指令）: $installedInstructionCount / $($instructionCount + 1)")
+    }
+    if ($installedAgentCount -lt $agentCount) {
+        Add-Issue("已安装 agents 数量少于源仓库: $installedAgentCount / $agentCount")
+    }
+    if ($installedPromptCount -lt $promptCount) {
+        Add-Issue("已安装 prompts 数量少于源仓库: $installedPromptCount / $promptCount")
+    }
+}
 
 if ($issues.Count -gt 0) {
-    Write-Host "`n发现以下问题:" -ForegroundColor Red
+    Write-Output ""
+    Write-Output "发现以下问题:"
     foreach ($issue in $issues) {
-        Write-Host "  - $issue" -ForegroundColor Red
+        Write-Output "  - $issue"
     }
     exit 1
 }
 
-Write-Host "`n运行时核心资产校验通过。" -ForegroundColor Green
+Write-Output ""
+Write-Output "运行时核心资产校验通过。"
