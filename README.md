@@ -1,8 +1,10 @@
 # PeikeSmart Skills
 
-**PeikeSmart Copilot 资产统一管理库**——集中管理 PeikeSmart 系列项目所有可复用的 Copilot 资产：技能、指令、提示词、智能体，整体规范基于 NewLife 体系持续演化。
+**PeikeSmart Copilot 资产统一管理库**——集中管理 PeiKeSmart 组织下多个独立代码仓库共用的 Copilot 资产：技能、指令、提示词、智能体，整体规范基于 NewLife 体系持续演化。
 
 克隆到任意机器后，执行一条脚本即可将全部资产安装到 VS Code 用户数据目录，**无需在每个项目里各放一份 `.github`**。
+
+> 本仓库本身不是业务源码 monorepo，也不承载各个产品仓库的 C# 项目源码；它是面向 PeiKeSmart 组织级复用的 Copilot 资产源仓库。
 
 ---
 
@@ -24,6 +26,8 @@ cd Pek.Skills
 ---
 
 ## 资产清单
+
+这些资产的典型使用方式是：在 Pek.NAI、Pek.Common、DH.FrameWork、DH.NCore、DH.NCode、Pek.Maui.Base 等独立目标仓库中作为统一协作规范加载，而不是在 Pek.Skills 内部直接编译运行。
 
 ### Skills（技能）
 
