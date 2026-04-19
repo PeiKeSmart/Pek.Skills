@@ -1,6 +1,8 @@
 # PeikeSmart Skills
 
-**PeikeSmart Copilot 资产统一管理库**——集中管理 PeiKeSmart 组织下多个独立代码仓库共用的 Copilot 资产：技能、指令、提示词、智能体，整体规范基于 NewLife 体系持续演化。
+**PeikeSmart Copilot 资产统一管理库**——集中管理 PeiKeSmart 组织下多个独立代码仓库共用的 Copilot 资产：技能、指令、提示词、智能体，整体规范基于 DH 框架与 NewLife 体系持续演化。
+
+本仓库相关品牌与组织信息保留湖北登灏科技有限公司主体表述；后续品牌清理仅清理不应保留的旧品牌信息，不删除“基于DH框架”等必要表述。
 
 克隆到任意机器后，执行一条脚本即可将全部资产安装到 VS Code 用户数据目录，**无需在每个项目里各放一份 `.github`**。
 
