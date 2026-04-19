@@ -17,11 +17,16 @@
 git clone https://github.com/PeiKeSmart/Pek.Skills.git
 cd Pek.Skills
 
-# 安装全部 Copilot 资产到用户级目录
+# 安装全部 Copilot 资产到用户级目录（同时覆盖 Stable / Insiders）
 .\scripts\install-copilot-assets.ps1
 ```
 
 安装完成后**重启 VS Code**，所有项目即可使用以下资产，无需在每个项目中放 `.github` 目录。
+
+当前安装脚本会同时写入以下目录：
+
+- `%APPDATA%\Code\User`
+- `%APPDATA%\Code - Insiders\User`
 
 ---
 
@@ -34,6 +39,8 @@ cd Pek.Skills
 如需在发版前快速自检资产完整性，可执行：`./scripts/verify-copilot-assets.ps1`。
 
 如需连同用户目录中的已安装资产一起校验，可执行：`./scripts/verify-copilot-assets.ps1 -CheckInstalled`。
+
+说明：校验脚本的运行时输出目前统一使用英文，以降低不同 PowerShell 宿主下的编码与输出兼容性问题。
 
 ### Skills（技能）
 

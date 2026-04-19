@@ -9,6 +9,9 @@
     - 主指令中引用的 instructions 是否存在
     - README 中列出的 instructions / agents / prompts 是否存在
 
+    说明：运行时输出统一使用 ASCII / English 文案，避免不同 PowerShell 宿主
+    对中文输出、编码和字符串解析的兼容性差异。
+
     若发现缺口则以非 0 退出码结束，便于发版前快速自检。
 
 .EXAMPLE
@@ -28,7 +31,7 @@ function Add-Issue([string]$message) {
 }
 
 function Assert-Path([string]$path, [string]$label) {
-    if (-not (Test-Path $path)) { Add-Issue("缺少${label}: $path") }
+    if (-not (Test-Path $path)) { Add-Issue("Missing ${label}: $path") }
 }
 
 $githubDir = Join-Path $RepoRoot ".github"
@@ -40,25 +43,26 @@ $readme = Join-Path $RepoRoot "README.md"
 $globalInstructions = Join-Path $githubDir "copilot-instructions.md"
 $installScript = Join-Path $RepoRoot "scripts\install-copilot-assets.ps1"
 $compatScript = Join-Path $RepoRoot "scripts\sync-skills-to-user.ps1"
-$installedRoot = Join-Path $env:APPDATA "Code\User\prompts"
-$installedSkillsDir = Join-Path $installedRoot "skills"
-$installedGlobalInstructions = Join-Path $installedRoot "peikesmart-global.instructions.md"
+$installedRoots = @(
+    [PSCustomObject]@{ Name = "VS Code"; Root = (Join-Path $env:APPDATA "Code\User\prompts") },
+    [PSCustomObject]@{ Name = "VS Code Insiders"; Root = (Join-Path $env:APPDATA "Code - Insiders\User\prompts") }
+)
 
-Assert-Path $githubDir ".github 目录"
-Assert-Path $skillsDir "skills 目录"
-Assert-Path $instructionsDir "instructions 目录"
-Assert-Path $agentsDir "agents 目录"
-Assert-Path $promptsDir "prompts 目录"
+Assert-Path $githubDir ".github directory"
+Assert-Path $skillsDir "skills directory"
+Assert-Path $instructionsDir "instructions directory"
+Assert-Path $agentsDir "agents directory"
+Assert-Path $promptsDir "prompts directory"
 Assert-Path $readme "README.md"
-Assert-Path $globalInstructions "全局协作指令"
-Assert-Path $installScript "主安装脚本"
-Assert-Path $compatScript "兼容安装脚本"
+Assert-Path $globalInstructions "global instructions"
+Assert-Path $installScript "main install script"
+Assert-Path $compatScript "compat install script"
 
 if (Test-Path $skillsDir) {
     foreach ($folder in (Get-ChildItem -Path $skillsDir -Directory)) {
         $skillFile = Join-Path $folder.FullName "SKILL.md"
         if (-not (Test-Path $skillFile)) {
-            Add-Issue("技能目录缺少 SKILL.md: $($folder.FullName)")
+            Add-Issue("Missing SKILL.md in skill directory: $($folder.FullName)")
         }
     }
 }
@@ -70,7 +74,7 @@ if (Test-Path $globalInstructions) {
         $fileName = $match.Value
         $candidate = Join-Path $instructionsDir $fileName
         if (-not (Test-Path $candidate)) {
-            Add-Issue("主指令引用了不存在的 instructions 文件: $fileName")
+            Add-Issue("Global instructions reference missing instructions file: $fileName")
         }
     }
 }
@@ -80,9 +84,10 @@ if (Test-Path $readme) {
 
     foreach ($match in [regex]::Matches($content, '[A-Za-z0-9_-]+\.instructions\.md')) {
         $fileName = $match.Value
+        if ($fileName -eq 'peikesmart-global.instructions.md') { continue }
         $candidate = Join-Path $instructionsDir $fileName
         if (-not (Test-Path $candidate)) {
-            Add-Issue("README 引用了不存在的 instructions 文件: $fileName")
+            Add-Issue("README references missing instructions file: $fileName")
         }
     }
 
@@ -90,7 +95,7 @@ if (Test-Path $readme) {
         $fileName = $match.Value
         $candidate = Join-Path $agentsDir $fileName
         if (-not (Test-Path $candidate)) {
-            Add-Issue("README 引用了不存在的 agent 文件: $fileName")
+            Add-Issue("README references missing agent file: $fileName")
         }
     }
 
@@ -98,7 +103,7 @@ if (Test-Path $readme) {
         $fileName = $match.Value
         $candidate = Join-Path $promptsDir $fileName
         if (-not (Test-Path $candidate)) {
-            Add-Issue("README 引用了不存在的 prompt 文件: $fileName")
+            Add-Issue("README references missing prompt file: $fileName")
         }
     }
 }
@@ -108,45 +113,54 @@ $instructionCount = if (Test-Path $instructionsDir) { (Get-ChildItem -Path $inst
 $agentCount = if (Test-Path $agentsDir) { (Get-ChildItem -Path $agentsDir -File -Filter *.agent.md | Measure-Object).Count } else { 0 }
 $promptCount = if (Test-Path $promptsDir) { (Get-ChildItem -Path $promptsDir -File -Filter *.prompt.md | Measure-Object).Count } else { 0 }
 
-Write-Output "Pek.Skills 源资产统计:"
+Write-Output "Pek.Skills source asset summary:"
 Write-Output "  Skills       : $skillCount"
 Write-Output "  Instructions : $instructionCount"
 Write-Output "  Agents       : $agentCount"
 Write-Output "  Prompts      : $promptCount"
 
 if ($CheckInstalled) {
-    Assert-Path $installedRoot "安装目标目录"
-    Assert-Path $installedSkillsDir "已安装 skills 目录"
-    Assert-Path $installedGlobalInstructions "已安装全局指令"
+    foreach ($installed in $installedRoots) {
+        $installedName = $installed.Name
+        $installedRoot = $installed.Root
+        $installedSkillsDir = Join-Path $installedRoot "skills"
+        $installedGlobalInstructions = Join-Path $installedRoot "peikesmart-global.instructions.md"
 
-    $installedSkillCount = if (Test-Path $installedSkillsDir) { (Get-ChildItem -Path $installedSkillsDir -Directory | Measure-Object).Count } else { 0 }
-    $installedInstructionCount = if (Test-Path $installedRoot) { (Get-ChildItem -Path $installedRoot -File -Filter *.instructions.md | Measure-Object).Count } else { 0 }
-    $installedAgentCount = if (Test-Path $installedRoot) { (Get-ChildItem -Path $installedRoot -File -Filter *.agent.md | Measure-Object).Count } else { 0 }
-    $installedPromptCount = if (Test-Path $installedRoot) { (Get-ChildItem -Path $installedRoot -File -Filter *.prompt.md | Measure-Object).Count } else { 0 }
+        Assert-Path $installedRoot ("Installed prompts root ({0})" -f $installedName)
+        Assert-Path $installedSkillsDir ("Installed skills dir ({0})" -f $installedName)
+        Assert-Path $installedGlobalInstructions ("Installed global instructions ({0})" -f $installedName)
 
-    Write-Output "已安装资产统计:"
-    Write-Output "  Skills       : $installedSkillCount"
-    Write-Output "  Instructions : $installedInstructionCount"
-    Write-Output "  Agents       : $installedAgentCount"
-    Write-Output "  Prompts      : $installedPromptCount"
+        $installedSkillCount = if (Test-Path $installedSkillsDir) { (Get-ChildItem -Path $installedSkillsDir -Directory | Measure-Object).Count } else { 0 }
+        $installedInstructionCount = if (Test-Path $installedRoot) { (Get-ChildItem -Path $installedRoot -File -Filter *.instructions.md | Measure-Object).Count } else { 0 }
+        $installedAgentCount = if (Test-Path $installedRoot) { (Get-ChildItem -Path $installedRoot -File -Filter *.agent.md | Measure-Object).Count } else { 0 }
+        $installedPromptCount = if (Test-Path $installedRoot) { (Get-ChildItem -Path $installedRoot -File -Filter *.prompt.md | Measure-Object).Count } else { 0 }
 
-    if ($installedSkillCount -lt $skillCount) {
-        Add-Issue("已安装 skills 数量少于源仓库: $installedSkillCount / $skillCount")
-    }
-    if ($installedInstructionCount -lt ($instructionCount + 1)) {
-        Add-Issue("已安装 instructions 数量少于预期（含全局指令）: $installedInstructionCount / $($instructionCount + 1)")
-    }
-    if ($installedAgentCount -lt $agentCount) {
-        Add-Issue("已安装 agents 数量少于源仓库: $installedAgentCount / $agentCount")
-    }
-    if ($installedPromptCount -lt $promptCount) {
-        Add-Issue("已安装 prompts 数量少于源仓库: $installedPromptCount / $promptCount")
+        Write-Output ("Installed asset summary ({0}):" -f $installedName)
+        Write-Output "  Skills       : $installedSkillCount"
+        Write-Output "  Instructions : $installedInstructionCount"
+        Write-Output "  Agents       : $installedAgentCount"
+        Write-Output "  Prompts      : $installedPromptCount"
+
+        if ($installedSkillCount -lt $skillCount) {
+            Add-Issue(("Installed skills less than source ({0}): {1} / {2}" -f $installedName, $installedSkillCount, $skillCount))
+        }
+        if ($installedInstructionCount -lt ($instructionCount + 1)) {
+            Add-Issue(("Installed instructions less than expected with global file ({0}): {1} / {2}" -f $installedName, $installedInstructionCount, ($instructionCount + 1)))
+        }
+        if ($installedAgentCount -lt $agentCount) {
+            Add-Issue(("Installed agents less than source ({0}): {1} / {2}" -f $installedName, $installedAgentCount, $agentCount))
+        }
+        if ($installedPromptCount -lt $promptCount) {
+            Add-Issue(("Installed prompts less than source ({0}): {1} / {2}" -f $installedName, $installedPromptCount, $promptCount))
+        }
+
+        Write-Output ""
     }
 }
 
 if ($issues.Count -gt 0) {
     Write-Output ""
-    Write-Output "发现以下问题:"
+    Write-Output "Issues found:"
     foreach ($issue in $issues) {
         Write-Output "  - $issue"
     }
@@ -154,4 +168,5 @@ if ($issues.Count -gt 0) {
 }
 
 Write-Output ""
-Write-Output "运行时核心资产校验通过。"
+Write-Output "Runtime core asset validation passed."
+exit 0
