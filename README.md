@@ -25,6 +25,10 @@ cd Pek.Skills
 
 安装完成后**重启 VS Code**，所有项目即可使用以下资产，无需在每个项目中放 `.github` 目录。
 
+建议安装后再执行一次 `./scripts/verify-copilot-assets.ps1 -CheckInstalled`，确认当前正在使用的 VS Code 或 VS Code Insiders 用户 `prompts` 目录中已经存在完整的 Pek.Skills 安装结果。
+
+在目标仓库中执行任务时，除了优先读取目标仓库本身的源码与规则外，若项目所在根目录下存在 `Code` 目录，还应优先从该目录中的共享仓库检索公共实现，再回退到 Pek.Skills 的通用资产。
+
 当前安装脚本会同时写入以下目录：
 
 - `%APPDATA%\Code\User`
@@ -62,6 +66,7 @@ cd Pek.Skills
 | `timer-scheduling` | TimerX/Cron 高级定时调度 |
 | `security` | Hash/AES/SM4/RSA/JWT/TokenProvider 安全与加密 |
 | `type-conversion` | ToInt/ToBoolean/StringHelper/Pool.StringBuilder 类型转换与工具 |
+| `pek-zero-templates` | Pek.Zero 新建项目模板：PekMvc、PekVueZero、PekBundle.Template 安装与使用 |
 
 **前端美化指南（frontend 类）**——从设计理论到组件级美化，共 12 个技能文件夹：
 

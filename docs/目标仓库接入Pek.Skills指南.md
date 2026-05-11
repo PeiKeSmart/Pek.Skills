@@ -25,7 +25,8 @@
 
 1. 开发机已安装 Pek.Skills 分发的用户级 Copilot 资产
 2. 目标仓库自身仍保留最小必要的本仓库规则
-3. Copilot 在执行任务时，优先读取目标仓库源码与规则，再回退到 Pek.Skills 通用资产
+3. 若项目所在根目录下存在 `Code` 目录，Copilot 会优先从其中的共享仓库检索公共实现
+4. Copilot 在执行任务时，优先读取目标仓库源码与规则，再回退到 Pek.Skills 通用资产
 
 ## 3. 推荐接入方式
 
@@ -50,6 +51,8 @@ cd Pek.Skills
 - `install-copilot-assets.ps1` 负责把 Skills、Instructions、Prompts、Agents、全局指令同步到 VS Code 用户目录
 - `verify-copilot-assets.ps1 -CheckInstalled` 负责确认“源仓库资产”与“用户目录已安装资产”同时完整
 
+在目标仓库实际使用前，还应确认当前正在使用的 VS Code 或 VS Code Insiders 的用户 `prompts` 目录里已经存在 Pek.Skills 安装结果；若未安装、安装不完整或版本明显过旧，应先重新执行安装脚本，再依赖这些组织级资产。
+
 ### 3.2 目标仓库保留最小本地规则
 
 即使已经安装 Pek.Skills，目标仓库仍建议保留以下最小上下文：
@@ -70,8 +73,9 @@ cd Pek.Skills
 
 1. 先读目标仓库源码、项目文件、测试、README
 2. 再读目标仓库本地的协作指令和模块规则
-3. 若目标仓库缺少显式规则，再回退到 Pek.Skills 的通用 Skills / Instructions / Agents
-4. 必要时才回溯上游 NewLife 生态源码或说明资料
+3. 再检索项目所在根目录下 `Code` 目录中的共享仓库实现与公共依赖源码
+4. 若目标仓库缺少显式规则，再回退到 Pek.Skills 的通用 Skills / Instructions / Agents
+5. 必要时才回溯上游 NewLife 生态源码或说明资料
 
 这条顺序很关键，因为它直接决定 Copilot 输出的是“贴合当前仓库”的建议，还是“泛化模板式”的建议。
 
@@ -125,17 +129,20 @@ cd Pek.Skills
 新仓库接入时，建议按以下顺序执行：
 
 1. 在开发机安装 Pek.Skills 资产
-2. 在目标仓库补齐 README、项目说明、测试说明
-3. 为目标仓库补齐最小 `copilot-instructions.md`
-4. 用真实任务验证 Copilot 是否会先读取目标仓库再回退 Pek.Skills
-5. 若发现某条规则具备跨仓库复用价值，再沉淀回 Pek.Skills
+2. 执行 `verify-copilot-assets.ps1 -CheckInstalled` 确认用户级资产安装完整
+3. 在目标仓库补齐 README、项目说明、测试说明
+4. 为目标仓库补齐最小 `copilot-instructions.md`
+5. 用真实任务验证 Copilot 是否会先读取目标仓库，再检索项目根下 `Code` 目录，再回退 Pek.Skills
+6. 若发现某条规则具备跨仓库复用价值，再沉淀回 Pek.Skills
 
 ## 8. 验收标准
 
 一个目标仓库可以认为“已经稳定接入 Pek.Skills”，至少应满足：
 
 - 开发机上 Pek.Skills 已正确安装
+- 当前正在使用的 VS Code 或 VS Code Insiders 用户 `prompts` 目录中已存在 Pek.Skills 安装结果
 - 目标仓库保留了自己的最小规则与文档
+- 若项目根目录存在 `Code` 目录，Copilot 会优先从其中检索共享仓库实现
 - Copilot 输出会优先贴合目标仓库，而不是把 Pek.Skills 当业务仓库处理
 - 组织级通用规则能在目标仓库中正常被复用
 
@@ -170,7 +177,9 @@ Pek.Skills 的正确角色是“组织级协作资产源”，不是“目标仓
 最稳的接法是：
 
 - 机器级安装 Pek.Skills
+- 安装后校验当前正在使用的 VS Code 或 VS Code Insiders 用户 `prompts` 目录
 - 仓库级保留目标仓库自己的最小规则
+- 如果项目根目录存在 `Code` 目录，优先检索其中共享仓库
 - Copilot 决策时始终先看目标仓库，再回退 Pek.Skills
 
 这样才能既复用组织资产，又不丢失目标仓库真实上下文。
