@@ -81,6 +81,13 @@
 - **集合初始化**：优先使用集合表达式 `[]`，如 `List<String> Tags { get; set; } = [];`
 - **Null 条件运算符**：优先使用 `?.`/`??` 简化空值检查；**C# 14 空条件赋值 `??=`**：变量为 null 时才赋值，可显著提升可读性
 
+### 4.3.1 Pek 启动生命周期约定
+
+- 在 `IPekStartup` 体系中，`ConfigureMiddleware(IApplicationBuilder application)` 是注册自定义中间件的默认位置，如 `UseMiddleware<T>()`、`UseWhen(...)`、`MapWhen(...)`
+- `BeforeRouting(IApplicationBuilder application)` 仅用于必须发生在 `UseRouting` 之前的特殊处理，不要把普通业务中间件默认塞到这里
+- `AfterAuth(IApplicationBuilder application)` 仅用于必须依赖认证或授权结果、且要发生在 Endpoints 之前的处理
+- 若仓库内已有同类启动实现，优先复用现有挂载位置与顺序；不要只因方法名相近就在 `BeforeRouting` 和 `ConfigureMiddleware` 之间随意切换
+
 ```csharp
 // ✅ C#14 空条件赋值（??=）：为 null 时才赋值，替代 if (x == null) x = ...
 _cache ??= new MemoryCache();
