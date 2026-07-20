@@ -119,25 +119,15 @@ cd Pek.Skills
 | `type-conversion` | ToInt/ToBoolean/StringHelper 类型转换 |
 | `pek-zero-templates` | Pek.Zero 新建项目模板 |
 
-**前端美化系列（frontend 类）**——12 个技能：
+**前端美化系列（frontend 类）**——保留 PeikeSmart 特有技能：
 
 | 技能 | 覆盖领域 |
 |------|----------|
-| `frontend-design-system` | 设计令牌：色彩/字号/间距/圆角/投影 |
-| `frontend-dark-theme` | 亮色/暗色主题设计与实现 |
-| `frontend-responsive-layout` | 响应式布局与导航适配 |
-| `frontend-tailwind-patterns` | Tailwind CSS 现代模式集 |
-| `frontend-theme-customization` | Element Plus/Ant Design 等主题定制 |
-| `frontend-table-styling` | 表格美化：斑马纹/Badge/骨架屏 |
-| `frontend-form-styling` | 表单美化：浮动标签/校验反馈 |
-| `frontend-navigation-styling` | 导航美化：侧边栏/顶栏/标签页 |
-| `frontend-card-dashboard` | 仪表盘与卡片布局 |
-| `frontend-modal-feedback` | 弹窗与反馈：模态框/Toast/空状态 |
-| `frontend-bootstrap-modernize` | Bootstrap 3/4 现代化美化 |
-| `frontend-visual-polish` | 视觉精修检查清单（20+ 项） |
-| `design-md` | 67 个知名品牌设计令牌集合（色板/字体间距/圆角投影），每个品牌为独立子技能，供前端美化参考 |
+| `frontend-bootstrap-modernize` | Bootstrap 3/4 现代化美化（Cube MVC 专用） |
+| `frontend-theme-customization` | 五大组件库主题定制（Element Plus/Ant Design 等） |
+| `design-md` | 67 个知名品牌设计令牌集合，每个品牌为独立子技能 |
 
-**完整技能列表**（共 76 个）：
+**完整技能列表**（共 66 个）：
 
 | 技能 | 覆盖领域 |
 |------|----------|
@@ -147,8 +137,10 @@ cd Pek.Skills
 | `capture-conventions` | 从仓库中提炼编码风格规律 |
 | `coding-standards` | 编码标准与命名规范检查 |
 | `compatibility-checks` | 多框架兼容性审查 |
+| `competitive-analysis` | 联网搜索竞品，制作功能对比矩阵 |
 | `compression` | TarFile/SevenZip 文件压缩 |
 | `config-provider-system` | 配置提供者架构设计 |
+| `cross-compatibility-testing` | 竞品交叉兼容测试（文件格式/网络协议/编解码） |
 | `cube-jobs` | Cube 定时作业体系 |
 | `cube-membership` | Cube 用户认证与权限管理 |
 | `cube-mvc-backend` | Cube MVC 后台管理系统 |
@@ -157,10 +149,9 @@ cd Pek.Skills
 | `data-file-formats` | CSV/Excel/DbTable 文件读写 |
 | `dependency-injection-ioc` | ObjectContainer IoC 容器 |
 | `design-md` | 67 个品牌设计令牌参考（含各品牌独立子技能：airbnb/apple/stripe 等） |
-| `development-workflow` | 研发全流程规范 |
+| `development-process` | 研发全流程：需求/架构/清单/迭代 |
 | `distributed-id` | Snowflake 分布式唯一 ID |
 | `event-bus-messaging` | 事件总线与消息解耦 |
-| `frontend-reference-faithful` | 像素级前端还原 |
 | `high-performance-buffers` | 零拷贝二进制缓冲区 |
 | `holiday-calendar` | 中国法定节假日判断 |
 | `hosted-services-lifecycle` | 托管服务生命周期 |
@@ -189,10 +180,9 @@ cd Pek.Skills
 | `timer-scheduler` | TimerX/Cron 高级调度原理 |
 | `utility-extensions` | 类型转换/字符串/路径扩展 |
 | `xcode-data-access-layer` | DAL 数据访问层与高级查询 |
-| `xcode-data-modeling` | Model.xml 数据建模 |
 | `xcode-entity-caching` | XCode 多级实体缓存 |
-| `xcode-entity-orm` | XCode 实体 CRUD 开发 |
 | `xcode-sharding-etl` | 分库分表与数据同步 |
+| `xml-comment-enrichment` | XML 注释 AI 友好化刷新（分级补全） |
 
 ### Agents（用户 `@` 调用）
 
