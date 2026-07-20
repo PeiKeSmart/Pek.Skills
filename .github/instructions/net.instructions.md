@@ -1,4 +1,5 @@
 ---
+description: '使用 NewLife.Net 进行高性能网络服务开发，涵盖 NetServer/NetSession 服务器架构、ISocketClient 客户端、SSL/TLS、管道编解码（StandardCodec/LengthFieldCodec）、粘包拆包处理。适用于 NetServer、网络编程、TCP/UDP/WebSocket 相关任务。'
 applyTo: "**/Net/**"
 ---
 

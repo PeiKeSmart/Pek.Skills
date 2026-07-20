@@ -1,4 +1,5 @@
 ---
+description: '使用 BenchmarkDotNet 设计性能基准测试，涵盖测试规范、报告格式、瓶颈分析（P0/P1/P2 优先级）。适用于性能测试、压测、基准测试、对比分析等任务。'
 applyTo: "**/Benchmark/**"
 ---
 

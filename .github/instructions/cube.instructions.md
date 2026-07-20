@@ -1,3 +1,7 @@
+---
+description: '使用 NewLife.Cube（魔方）Web 框架开发后台管理系统与 WebAPI。涵盖 EntityController 实体控制器、Area 区域注册、菜单与权限（PermissionFlags）、列表与表单字段配置、Search 高级搜索重写、CRUD 钩子。适用于 Cube、魔方、后台管理、控制器、Area 区域相关任务。'
+---
+
 # Cube 协作指令
 
 本指令面向基于 NewLife.Cube 的管理后台与 WebAPI 开发任务，帮助 Copilot 在 PeikeSmart 目标仓库中正确区分 Cube MVC、Cube WebAPI、配置页面、权限菜单和定时作业等常见场景。

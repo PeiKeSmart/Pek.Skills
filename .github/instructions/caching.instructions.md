@@ -1,4 +1,5 @@
 ---
+description: '使用 NewLife.Caching 进行缓存系统开发，涵盖 ICache 接口、MemoryCache、Redis、ICacheProvider 架构。适用于缓存设计、ICache 实现、分布式缓存相关任务。'
 applyTo: "**/Caching/**"
 ---
 

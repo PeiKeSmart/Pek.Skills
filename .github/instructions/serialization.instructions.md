@@ -1,4 +1,5 @@
 ---
+description: '使用 NewLife.Serialization 进行多格式序列化开发，涵盖 JSON（ToJson/ToJsonEntity）、XML（ToXml/ToXmlEntity）、高性能二进制（Binary.FastWrite/FastRead）、SpanSerializer、CSV 导出。适用于序列化、JSON、Binary、CSV 相关任务。'
 applyTo: "**/Serialization/**"
 ---
 

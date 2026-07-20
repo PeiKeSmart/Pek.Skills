@@ -1,144 +1,223 @@
 # PeikeSmart Skills
 
-**PeikeSmart Copilot 资产统一管理库**——集中管理 PeiKeSmart 组织下多个独立代码仓库共用的 Copilot 资产：技能、指令、提示词、智能体，整体规范基于 DH 框架与 NewLife 体系持续演化。
+**PeikeSmart Copilot 资产统一管理库**——集中管理 PeiKeSmart 组织下多个独立代码仓库共用的 Copilot 资产：全局指令、专用指令、技能、智能体、提示词，规范基于 DH 框架与 NewLife 体系持续演化。
 
-本仓库相关品牌与组织信息保留湖北登灏科技有限公司主体表述；后续品牌清理仅清理不应保留的旧品牌信息，不删除“基于DH框架”等必要表述。
+本仓库保留湖北登灏科技有限公司主体表述与"基于DH框架"等必要品牌信息；品牌清理仅清理不应保留的旧品牌信息，不得误删上述表述。
 
-克隆到任意机器后，执行一条脚本即可将全部资产安装到 VS Code 用户数据目录，**无需在每个项目里各放一份 `.github`**。
+克隆到任意机器后执行一条脚本即可安装到 VS Code 用户数据目录，**无需在每个项目放一份 `.github`**。
 
-> 本仓库本身不是业务源码 monorepo，也不承载各个产品仓库的 C# 项目源码；它是面向 PeiKeSmart 组织级复用的 Copilot 资产源仓库。
+> 本仓库不是业务源码 monorepo，它是面向 PeiKeSmart 组织级复用的 Copilot 资产源仓库。详见 `docs/PeiKeSmart多仓库定位说明.md`。
+
+---
+
+## 设计理念
+
+资产采用**三层架构**，分层承担不同职责：
+
+| 层级 | 载体 | 内容 | 维护成本 |
+|------|------|------|----------|
+| **Tier 1** | NuGet 包 XML 注释 | 类与成员的「如何使用」 | 跟代码一起维护 |
+| **Tier 2** | 全局 instructions + 专用 instructions | PeikeSmart 反常规约定（硬约束） | 集中维护 |
+| **Tier 3** | skills / agents / prompts | 流程类、架构决策类、跨组件取舍 | 仅必要项 |
+
+**判定原则**：能由 XML 注释或通用知识覆盖的，不做 skill；能由全局 instructions 承担的，不做专用 instructions。
+
+> 详细治理原则见 [`docs/三层架构与维护原则.md`](docs/三层架构与维护原则.md)。
 
 ---
 
 ## 快速开始
 
-### 安装到本机（Win10/Win11 + VS Code + GitHub Copilot）
-
 ```powershell
-# 克隆此仓库
 git clone https://github.com/PeiKeSmart/Pek.Skills.git
 cd Pek.Skills
-
-# 安装全部 Copilot 资产到用户级目录（同时覆盖 Stable / Insiders）
 .\scripts\install-copilot-assets.ps1
 ```
 
-安装完成后**重启 VS Code**，所有项目即可使用以下资产，无需在每个项目中放 `.github` 目录。
+安装完成后**重启 VS Code**，所有项目即可使用全部资产。
 
-建议安装后再执行一次 `./scripts/verify-copilot-assets.ps1 -CheckInstalled`，确认当前正在使用的 VS Code 或 VS Code Insiders 用户 `prompts` 目录中已经存在完整的 Pek.Skills 安装结果。
+### 更新
 
-在目标仓库中执行任务时，除了优先读取目标仓库本身的源码与规则外，若项目所在根目录下存在 `Code` 目录，还应优先从该目录中的共享仓库检索公共实现，再回退到 Pek.Skills 的通用资产。
+直接重新执行 `install-copilot-assets.ps1`。脚本基于 manifest 自动同步：
 
-当前安装脚本会同时写入以下目录：
+- 新资产 → 复制
+- 仓库已删除但上次安装过的 → **自动清理**（孤儿清理）
+- 不会触碰 manifest 之外的文件
 
-- `%APPDATA%\Code\User`
-- `%APPDATA%\Code - Insiders\User`
+### 首次从旧脚本迁移
+
+如果之前用过旧版安装脚本（无 manifest），磁盘上残留了大量旧资产，加 `-AssumeAllOrphans` 一次性清理：
+
+```powershell
+# 先预览将清理什么
+.\scripts\install-copilot-assets.ps1 -AssumeAllOrphans -WhatIf
+
+# 确认后执行
+.\scripts\install-copilot-assets.ps1 -AssumeAllOrphans
+```
+
+### 卸载
+
+```powershell
+.\scripts\install-copilot-assets.ps1 -Uninstall
+```
+
+### 校验
+
+```powershell
+# 检查源资产完整性
+.\scripts\verify-copilot-assets.ps1
+
+# 同时检查已安装到 VS Code 的资产
+.\scripts\verify-copilot-assets.ps1 -CheckInstalled
+```
 
 ---
 
 ## 资产清单
 
-这些资产的典型使用方式是：在 Pek.NAI、Pek.Common、DH.FrameWork、DH.NCore、DH.NCode、Pek.Maui.Base 等独立目标仓库中作为统一协作规范加载，而不是在 Pek.Skills 内部直接编译运行。
+> 完整资产清单以本 README 为**唯一事实源**，新增或删除资产后需同时更新本清单，并运行 `verify-copilot-assets.ps1` 校验一致性。
 
-相关说明可见：`docs/PeiKeSmart多仓库定位说明.md`、`docs/PeiKeSmart仓库地图.md`、`docs/运行时资产完整性检查清单.md`、`docs/目标仓库接入Pek.Skills指南.md`。
+### 全局指令
 
-如需在发版前快速自检资产完整性，可执行：`./scripts/verify-copilot-assets.ps1`。
+[`.github/copilot-instructions.md`](.github/copilot-instructions.md)——所有 PeikeSmart 项目通用的硬约束：加载标注、兼容性、编码规范、防御性注释、工作流、深度思考、Agent 协作协议。
 
-如需连同用户目录中的已安装资产一起校验，可执行：`./scripts/verify-copilot-assets.ps1 -CheckInstalled`。
+### 专用指令（按关键词触发加载）
 
-说明：校验脚本的运行时输出目前统一使用英文，以降低不同 PowerShell 宿主下的编码与输出兼容性问题。
-
-### Skills（技能）
-
-存放于 `.github/skills/`，每个技能一个子目录，含 `SKILL.md` 详细指南。当前共 73 个技能文件夹。
-
-**快速使用指南（usage 类）**——按需快速上手，代码示例为主：
-
-| 技能目录 | 覆盖领域 |
-|---------|---------|
-| `caching` | ICache/MemoryCache/Redis 统一缓存接口 |
-| `logging-tracing` | ILog/XTrace 日志与 ITracer/DefaultTracer 链路追踪 |
-| `networking` | NetServer/NetSession TCP/UDP/WebSocket 网络编程 |
-| `serialization` | JSON/Binary/Span/CSV 序列化 |
-| `configuration` | Config&lt;T&gt;/IConfigProvider/HttpConfigProvider 配置管理 |
-| `http-client` | ApiHttpClient 多节点 HTTP 客户端与负载均衡 |
-| `dependency-injection` | ObjectContainer/Host/Plugin/Actor 依赖注入与宿主 |
-| `timer-scheduling` | TimerX/Cron 高级定时调度 |
-| `security` | Hash/AES/SM4/RSA/JWT/TokenProvider 安全与加密 |
-| `type-conversion` | ToInt/ToBoolean/StringHelper/Pool.StringBuilder 类型转换与工具 |
-| `pek-zero-templates` | Pek.Zero 新建项目模板：PekMvc、PekVueZero、PekBundle.Template 安装与使用 |
-
-**前端美化指南（frontend 类）**——从设计理论到组件级美化，共 12 个技能文件夹：
-
-| 技能目录 | 覆盖领域 |
-|---------|---------|
-| `frontend-design-system` | 设计令牌体系：色彩/字号/间距/圆角/投影/动画 |
-| `frontend-dark-theme` | 亮色/暗色主题设计与实现 |
-| `frontend-responsive-layout` | 响应式布局与导航适配 |
-| `frontend-tailwind-patterns` | Tailwind CSS 现代模式集：按钮/卡片/毛玻璃/微动画 |
-| `frontend-theme-customization` | 五大组件库主题深度定制（Element Plus/Ant Design/Arco/TDesign/Naive UI） |
-| `frontend-table-styling` | 后台表格美化：表头/斑马纹/Badge/操作列/空状态/骨架屏 |
-| `frontend-form-styling` | 表单美化：浮动标签/校验反馈/分步表单/密码强度 |
-| `frontend-navigation-styling` | 导航美化：侧边栏/顶栏/面包屑/标签页路由 |
-| `frontend-card-dashboard` | 仪表盘与卡片布局：统计卡/图表容器/排行榜 |
-| `frontend-modal-feedback` | 弹窗与反馈：模态框/Toast/空状态页/错误页 |
-| `frontend-bootstrap-modernize` | Bootstrap 3/4 现代化美化（Cube MVC 专用） |
-| `frontend-visual-polish` | 视觉精修检查清单（20+ 项上线前打磨） |
-
-**深度设计指南（architecture 类）**——涵盖 XCode/Cube/Redis/MQTT/Net/序列化/安全/定时器等所有领域，共 49 个技能文件夹。代表性技能：
-
-| 技能目录 | 覆盖领域 |
-|---------|---------|
-| `project-architecture` | 项目架构分层：两层起步、按需渐进三层、充血模型 |
-| `testing-strategy` | XCode 测试策略：SQLite 轻量集成测试、零架构侵入、测试隔离 |
-| `xcode-entity-orm` | NewLife.XCode 实体 CRUD 开发 |
-| `xcode-data-modeling` | XCode Model.xml 数据建模 |
-| `cube-mvc-backend` | NewLife.Cube MVC 后台管理系统 |
-| `redis-client` | NewLife.Redis 高性能 Redis 客户端 |
-| `network-server-sessions` | NetServer/NetSession 高性能网络服务器 |
-| `cache-provider-architecture` | ICache 统一缓存接口与分布式锁 |
-| `security-crypto-patterns` | Hash/AES/RSA/JWT 加密安全 |
-| `stardust-platform` | 星尘分布式服务平台接入 |
-| `agent-service` | NewLife.Agent 跨平台系统服务 |
-| `benchmark-testing` | BenchmarkDotNet 性能基准测试 |
-
-### Instructions（指令）
-
-存放于 `.github/instructions/`，触发关键词时 Copilot 自动加载：
+存放于 [`.github/instructions/`](.github/instructions)：
 
 | 文件 | 触发场景 |
-|------|---------|
-| `xcode.instructions.md` | XCode / 数据库 / Model.xml |
-| `cube.instructions.md` | Cube / 管理后台 / WebAPI / 权限菜单 |
-| `net.instructions.md` | NetServer / 网络编程 |
+|------|----------|
+| `xcode.instructions.md` | XCode / Model.xml / 实体生成 / 数据库 ORM |
+| `cube.instructions.md` | Cube / 魔方 / 后台管理 / EntityController |
+| `development.instructions.md` | 新建系统 / 需求分析 / 架构设计 / 迭代开发 |
+| `net.instructions.md` | NetServer / 网络编程 / TCP/UDP |
 | `benchmark.instructions.md` | 性能测试 / BenchmarkDotNet |
-| `development.instructions.md` | 新建系统 / 需求分析 / 架构设计 |
 | `caching.instructions.md` | ICache / MemoryCache / Redis 缓存 |
-| `serialization.instructions.md` | JSON / Binary 序列化 |
+| `serialization.instructions.md` | JSON / Binary / Span 序列化 |
 | `security.instructions.md` | 加密 / Hash / JWT / RSA |
 | `remoting.instructions.md` | ApiHttpClient / RPC / 负载均衡 |
 | `configuration.instructions.md` | Config / IConfigProvider / 配置中心 |
 
-### Prompts（提示词）
+### Skills（按需加载）
 
-存放于 `.github/prompts/`：
+存放于 [`.github/skills/`](.github/skills)，每个技能一个子目录（`<name>/SKILL.md`）。当前共 73 个技能文件夹。
+
+**使用指南（usage 类）**——代码示例为主：
+
+| 技能 | 覆盖领域 |
+|------|----------|
+| `caching` | ICache/MemoryCache/Redis 统一缓存接口 |
+| `logging-tracing` | ILog/XTrace 日志与链路追踪 |
+| `networking` | NetServer/NetSession TCP/UDP/WebSocket |
+| `serialization` | JSON/Binary/Span/CSV 序列化 |
+| `configuration` | Config&lt;T&gt;/IConfigProvider 配置管理 |
+| `http-client` | ApiHttpClient 多节点 HTTP 客户端 |
+| `dependency-injection` | ObjectContainer/Host/Plugin 依赖注入 |
+| `timer-scheduling` | TimerX/Cron 高级定时调度 |
+| `security` | Hash/AES/SM4/RSA/JWT 安全与加密 |
+| `type-conversion` | ToInt/ToBoolean/StringHelper 类型转换 |
+| `pek-zero-templates` | Pek.Zero 新建项目模板 |
+
+**前端美化系列（frontend 类）**——12 个技能：
+
+| 技能 | 覆盖领域 |
+|------|----------|
+| `frontend-design-system` | 设计令牌：色彩/字号/间距/圆角/投影 |
+| `frontend-dark-theme` | 亮色/暗色主题设计与实现 |
+| `frontend-responsive-layout` | 响应式布局与导航适配 |
+| `frontend-tailwind-patterns` | Tailwind CSS 现代模式集 |
+| `frontend-theme-customization` | Element Plus/Ant Design 等主题定制 |
+| `frontend-table-styling` | 表格美化：斑马纹/Badge/骨架屏 |
+| `frontend-form-styling` | 表单美化：浮动标签/校验反馈 |
+| `frontend-navigation-styling` | 导航美化：侧边栏/顶栏/标签页 |
+| `frontend-card-dashboard` | 仪表盘与卡片布局 |
+| `frontend-modal-feedback` | 弹窗与反馈：模态框/Toast/空状态 |
+| `frontend-bootstrap-modernize` | Bootstrap 3/4 现代化美化 |
+| `frontend-visual-polish` | 视觉精修检查清单（20+ 项） |
+| `design-md` | 67 个知名品牌设计令牌集合（色板/字体间距/圆角投影），每个品牌为独立子技能，供前端美化参考 |
+
+**完整技能列表**（共 76 个）：
+
+| 技能 | 覆盖领域 |
+|------|----------|
+| `agent-service` | NewLife.Agent 跨平台系统服务 |
+| `benchmark-testing` | BenchmarkDotNet 性能基准测试 |
+| `cache-provider-architecture` | ICache 统一缓存接口与分布式锁 |
+| `capture-conventions` | 从仓库中提炼编码风格规律 |
+| `coding-standards` | 编码标准与命名规范检查 |
+| `compatibility-checks` | 多框架兼容性审查 |
+| `compression` | TarFile/SevenZip 文件压缩 |
+| `config-provider-system` | 配置提供者架构设计 |
+| `cube-jobs` | Cube 定时作业体系 |
+| `cube-membership` | Cube 用户认证与权限管理 |
+| `cube-mvc-backend` | Cube MVC 后台管理系统 |
+| `cube-oauth-sso` | OAuth/SSO 第三方登录 |
+| `cube-webapi` | Cube WebAPI 后端 API 服务 |
+| `data-file-formats` | CSV/Excel/DbTable 文件读写 |
+| `dependency-injection-ioc` | ObjectContainer IoC 容器 |
+| `design-md` | 67 个品牌设计令牌参考（含各品牌独立子技能：airbnb/apple/stripe 等） |
+| `development-workflow` | 研发全流程规范 |
+| `distributed-id` | Snowflake 分布式唯一 ID |
+| `event-bus-messaging` | 事件总线与消息解耦 |
+| `frontend-reference-faithful` | 像素级前端还原 |
+| `high-performance-buffers` | 零拷贝二进制缓冲区 |
+| `holiday-calendar` | 中国法定节假日判断 |
+| `hosted-services-lifecycle` | 托管服务生命周期 |
+| `http-client-loadbalancer` | 多端点负载均衡 HTTP 客户端 |
+| `http-server` | 轻量级 HTTP 服务端 |
+| `ip-location` | IPv4 归属地查询 |
+| `logging-tracing-system` | 日志与链路追踪体系 |
+| `map-geocoding` | 地理编码与逆编码 |
+| `merge-skill-knowledge` | 技能知识合并 |
+| `mqtt-client-server` | MQTT 客户端与内嵌 Broker |
+| `network-client` | NetClient/WebClientX 网络客户端 |
+| `network-server-sessions` | NetServer/NetSession 高性能服务器 |
+| `object-pool` | 无锁 CAS 对象池 |
+| `office-documents` | Excel/Word/PPT/PDF 文档生成 |
+| `pipeline-handler-model` | 管道处理器责任链 |
+| `plugin-framework` | 应用内插件系统 |
+| `project-architecture` | 两层/三层架构选型、充血模型 |
+| `redis-client` | NewLife.Redis 高性能客户端 |
+| `rocketmq-messaging` | Apache RocketMQ 消息队列 |
+| `security-crypto-patterns` | Hash/AES/RSA/JWT 加密模式 |
+| `serialization-patterns` | 序列化方案选型与扩展 |
+| `span-reader-writer` | SpanReader/SpanWriter 二进制读写 |
+| `stardust-platform` | 星尘分布式服务平台接入 |
+| `system-introspection` | 系统硬件与运行时信息 |
+| `testing-strategy` | XCode SQLite 集成测试策略 |
+| `timer-scheduler` | TimerX/Cron 高级调度原理 |
+| `utility-extensions` | 类型转换/字符串/路径扩展 |
+| `xcode-data-access-layer` | DAL 数据访问层与高级查询 |
+| `xcode-data-modeling` | Model.xml 数据建模 |
+| `xcode-entity-caching` | XCode 多级实体缓存 |
+| `xcode-entity-orm` | XCode 实体 CRUD 开发 |
+| `xcode-sharding-etl` | 分库分表与数据同步 |
+
+### Agents（用户 `@` 调用）
+
+存放于 [`.github/agents/`](.github/agents)：
+
+| Agent | 用途 |
+|-------|------|
+| `newlife-expert` | PeikeSmart 全生态技术专家 |
+| `code-review` | 按 PeikeSmart 规范 8 维度审查代码 |
+| `project-init` | 新项目初始化（优先 Pek.Zero 模板） |
+| `requirement-planning` | 需求整理、功能拆分、技术方案、任务分解 |
+| `write-tech-docs` | 中文技术文档写作 |
+| `release-prep` | 月度发版准备（ChangeLog/版本号/README） |
+| `convention-mining` | 分析代码库提炼编码约定 |
+| `dev-loop` | 自治开发循环：选取→实现→验证→提交 |
+| `implementation-audit` | 需求 vs 实现差距分析审计 |
+| `doc-sync` | 代码与文档双向同步 |
+
+### Prompts
+
+存放于 [`.github/prompts/`](.github/prompts)：
 
 | 文件 | 用途 |
 |------|------|
 | `doc-writer.prompt.md` | 为 C# 代码生成高质量 Markdown 文档 |
-
-### Agents（智能体）
-
-存放于 `.github/agents/`：
-
-| 文件 | 用途 |
-|------|------|
-| `newlife-expert.agent.md` | PeikeSmart 全生态技术专家 |
-| `code-review.agent.md` | PeikeSmart 代码审查（8维度检查） |
-| `project-init.agent.md` | PeikeSmart 新项目初始化助手 |
-| `requirement-planning.agent.md` | PeikeSmart 需求规划助手 |
-| `write-tech-docs.agent.md` | PeikeSmart 文档写作助手 |
-| `release-prep.agent.md` | 开源库月度发版准备（ChangeLog/版本号/README） |
 
 ---
 
@@ -146,35 +225,55 @@ cd Pek.Skills
 
 ```text
 .github/
-  copilot-instructions.md      # PeikeSmart 全局 Copilot 协作规范（含编码规范）
-  agents/                      # 智能体定义 (*.agent.md)  → chatmodes/
-  instructions/                # 场景指令 (*.instructions.md)  → prompts/
-  prompts/                     # 提示词模板 (*.prompt.md)  → prompts/
-  skills/                      # 技能文件夹，全部为 <name>/SKILL.md 格式 → prompts/skills/
-docs/                          # 分析文档、设计说明
+  copilot-instructions.md      # 全局 Copilot 协作规范（必须遵守）
+  instructions/                # 专用指令（关键词触发）
+  skills/                      # 技能（按需加载）
+  agents/                      # 智能体（@ 调用）
+  prompts/                     # 提示词模板
+docs/                          # 维护原则与治理文档
 scripts/
-  install-copilot-assets.ps1   # 安装脚本（主入口）
+  install-copilot-assets.ps1   # 安装/更新/卸载（主入口）
   sync-skills-to-user.ps1      # 旧名称兼容包装器
+  verify-copilot-assets.ps1    # 校验脚本
 ```
 
 ---
 
-## 安装说明
+## 安装路径
 
-`install-copilot-assets.ps1` 将资产复制到以下 VS Code 用户数据目录：
+`install-copilot-assets.ps1` 将资产复制到：
 
-| 资产类型 | 目标路径 |
-|---------|---------|
-| Skills (`<name>/SKILL.md` 文件夹) | `%APPDATA%\Code\User\prompts\skills\` |
-| Instructions (`*.instructions.md`) | `%APPDATA%\Code\User\prompts\` |
-| Prompts (`*.prompt.md`) | `%APPDATA%\Code\User\prompts\` |
-| Agents (`*.agent.md`) | `%APPDATA%\Code\User\prompts\` |
-| 全局指令 (`copilot-instructions.md`) | `%APPDATA%\Code\User\prompts\peikesmart-global.instructions.md` |
+| 资产 | 目标路径 |
+|------|----------|
+| Skills | `%USERPROFILE%\.copilot\skills\`（官方路径） + `%APPDATA%\Code\User\prompts\skills\`（兼容） |
+| Instructions / Prompts / Agents | `%APPDATA%\Code\User\prompts\` |
+| 全局指令 | `%APPDATA%\Code\User\prompts\peikesmart-global.instructions.md` |
+| VS Code Insiders | 同上，对应 `Code - Insiders` 目录 |
 
 ---
 
-## 维护说明
+## 维护原则
 
-1. 从其他 PeikeSmart 仓库（以及上游 NewLife 来源，如 `.github/` 目录）学到新规范后，在此库中统一更新。
-2. 更新后重新运行 `install-copilot-assets.ps1` 即可覆盖更新本机资产。
-3. 提交到 Git，其他机器 `git pull` 后再次运行脚本即可同步。
+1. **30 天淘汰制**：连续 30 天未触发的 skill / instructions 进入删除候选
+2. **搬运型禁止**：能由 XML 注释或通用知识覆盖的内容不做 skill
+3. **单一事实源**：API 用法首选 XML 注释；架构决策首选 skill；硬约束首选全局 instructions
+4. **改动验证**：修改后在真实项目随机提一个相关问题，观察「已加载」标注是否符合预期
+
+详见 [`docs/三层架构与维护原则.md`](docs/三层架构与维护原则.md)。
+
+---
+
+## 项目使用建议
+
+将本仓库资产安装到 VS Code 后，建议在你的项目 `README.md` 中声明以下信息，帮助 AI 更准确地工作：
+
+```markdown
+## AI 协作声明
+
+- **项目类型**：.NET 后端 / Node.js 前端 / 全栈
+- **编译命令**：`dotnet build` / `pnpm build`
+- **测试命令**：`dotnet test` / `pnpm test`
+- **核心项目**：`src/MyApp.Service`（后端）、`src/MyApp.Web`（前端）
+```
+
+> 声明后，开发循环 agent 的编译/测试命令检测步骤会优先以 README 声明为准，无需每次手动指定。

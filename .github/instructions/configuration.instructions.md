@@ -1,4 +1,5 @@
 ---
+description: '使用 NewLife.Configuration 进行配置系统开发，涵盖 Config<T>、IConfigProvider、HttpConfigProvider、CommandParser 架构。适用于配置设计、远程配置中心、配置文件解析等任务。'
 applyTo: "**/Configuration/**"
 ---
 

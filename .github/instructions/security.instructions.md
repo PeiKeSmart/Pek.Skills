@@ -1,4 +1,5 @@
 ---
+description: '使用 NewLife.Security 进行安全开发，涵盖哈希（MD5/SHA/CRC）、对称加密（AES/SM4/DES）、非对称加密（RSA）、JWT 令牌构建与验证、TokenProvider。适用于加密、安全、Hash、JWT、签名相关任务。'
 applyTo: "**/Security/**"
 ---
 

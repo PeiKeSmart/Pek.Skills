@@ -1,4 +1,5 @@
 ---
+description: '使用 NewLife.Remoting 进行远程调用开发，涵盖 ApiHttpClient 多节点 HTTP 客户端、ApiClient/ApiServer RPC 通信、负载均衡、故障转移。适用于远程调用、RPC、HTTP 客户端、负载均衡相关任务。'
 applyTo: "**/Remoting/**"
 ---
 

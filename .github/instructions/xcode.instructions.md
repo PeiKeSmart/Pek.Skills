@@ -1,3 +1,7 @@
+---
+description: '使用 NewLife.XCode 数据中间件进行数据建模与实体操作。涵盖 Model.xml 表结构设计、xcode 命令生成实体、数据库 CRUD、实体 Biz 查询封装、运行时拦截器与反向工程。适用于 XCode、实体生成、ORM、Model.xml、数据库相关任务。'
+---
+
 # XCode 协作指令
 
 本指令面向新生命团队（NewLife）开源数据中间件 XCode，帮助 Copilot 在 .NET 项目中正确使用 XCode 进行数据建模和实体操作。
